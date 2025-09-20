@@ -1,0 +1,70 @@
+{
+  "name": "rhc-onboarding-assistant",
+  "displayName": "Resource Health Onboarding Assistant",
+  "description": "Assists with onboarding and maintaining Azure Resource Health policies and resource configs (RHC).",
+  "version": "0.0.1",
+  "publisher": "internal",
+  "engines": { "vscode": ">=1.85.0" },
+  "categories": ["Other"],
+  "activationEvents": [
+    "workspaceContains:PolicyFiles",
+    "workspaceContains:ResourceConfigs"
+  ],
+  "main": "dist/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "rhc.index.refresh", "title": "RHC: Refresh Index" },
+      { "command": "rhc.validate.repository", "title": "RHC: Validate Repository" },
+      { "command": "rhc.scaffold.newResourceType", "title": "RHC: Scaffold New Resource Type" },
+      { "command": "rhc.scaffold.addEvent", "title": "RHC: Add Event to Policy" },
+      { "command": "rhc.compare.configs", "title": "RHC: Compare Resource Configs" },
+      { "command": "rhc.pr.checklist", "title": "RHC: Generate PR Checklist" },
+      { "command": "rhc.find.unreferencedPolicies", "title": "RHC: List Unreferenced Policies" },
+      { "command": "rhc.search.events", "title": "RHC: Search Events" },
+      { "command": "rhc.ai.rebuildEmbeddings", "title": "RHC AI: Rebuild Embedding Index" }
+    ],
+    "chatParticipants": [
+      {
+        "id": "rhc",
+        "name": "rhc",
+        "description": "Answers questions about Resource Health policies and events (keyword-based)."
+      }
+    ],
+    "configuration": {
+      "title": "RHC Onboarding Assistant",
+      "properties": {
+        "rhc.scaffold.environments": {
+          "type": "array",
+          "items": {"type": "string"},
+          "default": ["Prod", "Int"],
+          "description": "Environments to scaffold when creating a new resource type." },
+        "rhc.index.includeDocs": {"type": "boolean", "default": true, "description": "Include documentation folder content in the index."}
+        ,"rhc.ai.embeddingProvider": {"type": "string", "enum": ["local-pseudo", "azureOpenAI"], "default": "local-pseudo", "description": "Embedding provider backend."}
+        ,"rhc.ai.maxContextEvents": {"type": "number", "default": 12, "description": "Maximum event records to include in RAG context."}
+      }
+    },
+    "viewsContainers": {"activitybar": [{"id": "rhcExplorer","title": "RHC","icon": "resources/rhc.svg"}]},
+  "views": {"rhcExplorer": [{"id": "rhcTree","name": "Resource Health","icon": "resources/rhc.svg"}]}
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "watch": "tsc -w -p .",
+    "lint": "echo 'TODO add linter'",
+    "package": "vsce package",
+    "build": "npm run compile",
+    "test": "mocha --require ts-node/register src/test/**/*.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.4.0",
+  "vsce": "^2.15.0",
+    "mocha": "^10.0.0",
+    "@types/mocha": "^10.0.0",
+    "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "jsonc-parser": "^3.2.1",
+    "ajv": "^8.12.0"
+  }
+}

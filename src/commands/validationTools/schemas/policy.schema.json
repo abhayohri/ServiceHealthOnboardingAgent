@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RHC Policy File",
+  "type": "object",
+  "properties": {
+    "PersistentEvents": { "type": "array", "items": { "$ref": "#/definitions/event" } },
+    "TransientEvents": { "type": "array", "items": { "$ref": "#/definitions/event" } }
+  },
+  "additionalProperties": true,
+  "definitions": {
+    "event": {
+      "type": "object",
+      "required": ["EventId", "EventName", "ReasonType", "Title", "Summary", "RecommendedActions"],
+      "properties": {
+        "EventId": { "type": "string", "pattern": "^[A-Za-z0-9]+$" },
+        "EventName": { "type": "string" },
+        "ReasonType": { "type": "string" },
+        "Title": { "type": "string" },
+        "Summary": { "type": "string" },
+        "RecommendedActions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["Action"],
+            "properties": {
+              "Action": { "type": "string" },
+              "ActionUrl": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}
